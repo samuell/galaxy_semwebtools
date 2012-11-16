@@ -26,17 +26,26 @@ if not options.url:
 if not options.sparql_query:
 	sys.exit("You have to specify a SPARQL query! Use the -h flag to view command line options!")
 
+if len(options.sparql_query) < 9: 
+	sys.exit("Your SPARQL query is too short (printed below)!\n" + options.sparql_query)
+
 if not re.match("^http", options.url):
 	sys.exit("The URL has to start with 'http://'! Please try again!")
+
+f = open("/home/samuel/opt/galaxy/tools/sparql_import/query.txt","w")
+f.write(options.sparql_query + "\n")
+f.close()
 
 # -----------------------
 # The main code
 # -----------------------
 
 def main():
-	sparql_query = str(options.sparql_query)
+	print "QUERY: options.sparql_query\n"
+	sparql_query = urllib.quote_plus(options.sparql_query)
 	url = options.url
 
+	#sparql_query_url = url + "?query=" + sparql_query
 	sparql_query_url = url + "?query=" + sparql_query
 
 	sparql_endpoint = urllib.urlopen(sparql_query_url)
@@ -44,9 +53,6 @@ def main():
 	sparql_endpoint.close()
 
 	xmldata = extract_xml( results )
-
-	#print("XMLDATA:\n" + xmldata)
-	#print("-"*80)
 
 	root = et.fromstring(xmldata)
 	tree = et.ElementTree(root)
