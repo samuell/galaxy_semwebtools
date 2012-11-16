@@ -1,9 +1,9 @@
 <tool id="sparql_import" name="SPARQL Import" version="1.1.0">
 	<description>Import data from a SPARQL Endpoint</description>
-	<command interpreter="python">galaxy_sparqlendpoint.py -u $url -q $sparql_query</command>
+	<command interpreter="python">sparql_import.py -u $url -q $sparql_query</command>
 	<inputs>
-		<param name="url" type="text" format="text" label="SPARQL Endpoint URL"/>
-		<param name="sparql_query" type="text" format="textarea" label="SPARQL Query"/>
+		<param name="url" type="text" format="text" size="80" label="SPARQL Endpoint URL"/>
+		<param name="sparql_query" type="text" format="text" area="True" size="5x80" label="SPARQL Query"/>
 	</inputs>
 	<outputs>
 		<data name="output" format="tabular"/>
