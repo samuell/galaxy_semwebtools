@@ -6,7 +6,12 @@
 # --------------------------------------------------------
 
 from optparse import OptionParser
+from pyquery import PyQuery as pyquery
 import urllib, sys, re
+
+# -----------------------
+# Option parsing
+# -----------------------
 
 parser = OptionParser()
 parser.add_option("-u", "--url",
@@ -23,17 +28,36 @@ if not options.sparql_query:
 if not re.match("^http", options.url):
 	sys.exit("The URL has to start with 'http://'! Please try again!")
 
-sparql_query = str(options.sparql_query)
-url = options.url
+# -----------------------
+# The main code
+# -----------------------
 
-sparql_query_url = url + "?query=" + sparql_query
+def main():
+	sparql_query = str(options.sparql_query)
+	url = options.url
 
-# Open the URL to the SPARQL endpoint
-sparql_endpoint = urllib.urlopen(sparql_query_url)
-results = sparql_endpoint.read()
-sparql_endpoint.close()
+	sparql_query_url = url + "?query=" + sparql_query
 
-# Just for debugging ...
-# print("SPARQL query:\n" + sparql_query)
-print(results)
+	sparql_endpoint = urllib.urlopen(sparql_query_url)
+	results = sparql_endpoint.read()
+	sparql_endpoint.close()
 
+	results = extract_xml( results )
+
+	# Just for debugging ...
+	# print("SPARQL query:\n" + sparql_query)
+	print(results)
+
+	# Open the URL to the SPARQL endpoint
+	resultdoc = pyquery(results)
+
+# -----------------------
+# Helper methods
+# -----------------------
+
+def extract_xml( content ):
+	xmlcontent = re.search("<\?xml.*", content, re.DOTALL).group(0)
+	return xmlcontent
+
+if __name__ == '__main__':
+	main()
