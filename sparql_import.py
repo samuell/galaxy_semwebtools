@@ -5,6 +5,7 @@
 # Created: 2012-11-16
 # --------------------------------------------------------
 
+from xml.etree import ElementTree as et
 from optparse import OptionParser
 from pyquery import PyQuery as pyquery
 import urllib, sys, re
@@ -42,14 +43,30 @@ def main():
 	results = sparql_endpoint.read()
 	sparql_endpoint.close()
 
-	results = extract_xml( results )
+	xmldata = extract_xml( results )
+
+	#print("XMLDATA:\n" + xmldata)
+	#print("-"*80)
+
+	root = et.fromstring(xmldata)
+	tree = et.ElementTree(root)
+	outline = ""
+
+	results = root.getchildren()[1]
+	for result in results:
+		for binding in result.getchildren():
+			content = binding.getchildren()[0].text
+			outline += content + "\t"
+		outline += "\n"
+
+	print outline
+
+	#for result in results.findall("result"):
+	#	print result.tag, result.attrib
 
 	# Just for debugging ...
 	# print("SPARQL query:\n" + sparql_query)
-	print(results)
-
-	# Open the URL to the SPARQL endpoint
-	resultdoc = pyquery(results)
+	# print(xmldata)
 
 # -----------------------
 # Helper methods
