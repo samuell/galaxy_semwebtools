@@ -41,12 +41,17 @@ f.close()
 # -----------------------
 
 def main():
-	print "QUERY: options.sparql_query\n"
-	sparql_query = urllib.quote_plus(options.sparql_query)
+	sparql_query = options.sparql_query
+
+	sparql_query = sparql_query.replace("__oc__","{")
+	sparql_query = sparql_query.replace("__cc__","}")
+
+	sparql_query = urllib.quote_plus(sparql_query)
+
 	url = options.url
 
-	#sparql_query_url = url + "?query=" + sparql_query
 	sparql_query_url = url + "?query=" + sparql_query
+
 
 	sparql_endpoint = urllib.urlopen(sparql_query_url)
 	results = sparql_endpoint.read()
