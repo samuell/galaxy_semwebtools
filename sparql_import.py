@@ -41,40 +41,39 @@ f.close()
 # -----------------------
 
 def main():
+	# Extract command line options
 	sparql_query = options.sparql_query
 	sparql_query = sparql_query.replace("__oc__","{")
 	sparql_query = sparql_query.replace("__cc__","}")
 	sparql_query = urllib.quote_plus(sparql_query)
-
 	url = options.url
 
+	# Create SPARQL query URL
 	sparql_query_url = url + "?query=" + sparql_query
 
+	# Read from SPARQL Endpoint
 	sparql_endpoint = urllib.urlopen(sparql_query_url)
 	results = sparql_endpoint.read()
 	sparql_endpoint.close()
 
+	# Convert to tabular format
 	xmldata = extract_xml( results )
 	tabular = xml_to_tabular( xmldata )
 
+	# Print to stdout
 	print tabular
-
-	#for result in results.findall("result"):
-	#	print result.tag, result.attrib
-
-	# Just for debugging ...
-	# print("SPARQL query:\n" + sparql_query)
-	# print(xmldata)
 
 # -----------------------
 # Helper methods
 # -----------------------
 
 def extract_xml( content ):
+	'''Extract the part of the document starting with <?xml ...'''
 	xmlcontent = re.search("<\?xml.*", content, re.DOTALL).group(0)
 	return xmlcontent
 
 def xml_to_tabular( xmldata ):
+	'''Convert SPARQL result set XML format to tabular text'''
 	root = et.fromstring(xmldata)
 	tree = et.ElementTree(root)
 	tabular = ""
