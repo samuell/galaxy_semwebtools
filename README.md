@@ -16,4 +16,5 @@ This toolkit currently just contains a tool that enables to specify an URL to a 
 
 ## Change log ##
 
+* 2012-11-16: Now works properly (at least for my simple test case)!
 * 2012-11-16: Created today, still under heavy development!
