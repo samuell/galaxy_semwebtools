@@ -19,12 +19,16 @@ parser.add_option("-u", "--url",
 	help = "The URL to the SPARQL endpoint")
 parser.add_option("-q", "--sparql_query",
 	help = "A SPARQL query to send to a SPARQL endpoint")
+parser.add_option("-o", "--output_file",
+	help = "An output file for storing the results")
 (options, args) = parser.parse_args()
 
 if not options.url:
 	sys.exit("You have to specify an URL! Use the -h flag to view command line options!")
 if not options.sparql_query:
 	sys.exit("You have to specify a SPARQL query! Use the -h flag to view command line options!")
+if not options.output_file:
+	sys.exit("You have to specify an output file! Use the -h flag to view command line options!")
 
 if len(options.sparql_query) < 9: 
 	sys.exit("Your SPARQL query is too short (printed below)!\n" + options.sparql_query)
@@ -48,6 +52,8 @@ def main():
 	sparql_query = urllib.quote_plus(sparql_query)
 	url = options.url
 
+	output_file = options.output_file
+
 	# Create SPARQL query URL
 	sparql_query_url = url + "?query=" + sparql_query
 
@@ -60,8 +66,10 @@ def main():
 	xmldata = extract_xml( results )
 	tabular = xml_to_tabular( xmldata )
 
-	# Print to stdout
-	print tabular
+	# Print to file
+	of = open(output_file, "w")
+	of.write(tabular)
+	of.close()
 
 # -----------------------
 # Helper methods
@@ -80,10 +88,9 @@ def xml_to_tabular( xmldata ):
 
 	results = root.getchildren()[1]
 	for result in results:
-		for binding in result.getchildren():
-			content = binding.getchildren()[0].text
-			tabular += content + "\t"
-		tabular += "\n"	
+		line_bits = [binding.getchildren()[0].text for binding in result.getchildren()]
+		line = "\t".join(line_bits)
+		tabular += line + "\n"	
 	return tabular
 
 if __name__ == '__main__':

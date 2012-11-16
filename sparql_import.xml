@@ -1,12 +1,12 @@
 <tool id="sparql_import" name="SPARQL Import" version="0.0.1">
 	<description>Import data from a SPARQL Endpoint</description>
-	<command interpreter="python">sparql_import.py -u $url -q "$sparqlquery"</command>
+	<command interpreter="python">sparql_import.py -u $url -q "$sparqlquery" -o $outfile</command>
 	<inputs>
 		<param name="url" type="text" format="text" size="80" label="SPARQL Endpoint URL"/>
 		<param name="sparqlquery" type="text" format="text" area="True" size="5x80" label="SPARQL Query"/>
 	</inputs>
 	<outputs>
-		<data name="output" format="tabular"/>
+		<data name="outfile" format="tabular"/>
 	</outputs>
 	<help>
 
