@@ -7,7 +7,6 @@
 
 from xml.etree import ElementTree as et
 from optparse import OptionParser
-from pyquery import PyQuery as pyquery
 import urllib, sys, re
 
 # -----------------------
@@ -36,10 +35,6 @@ if len(options.sparql_query) < 9:
 if not re.match("^http", options.url):
 	sys.exit("The URL has to start with 'http://'! Please try again!")
 
-f = open("/home/samuel/opt/galaxy/tools/sparql_import/query.txt","w")
-f.write(options.sparql_query + "\n")
-f.close()
-
 # -----------------------
 # The main code
 # -----------------------
@@ -48,7 +43,9 @@ def main():
 	# Extract command line options
 	sparql_query = options.sparql_query
 	sparql_query = sparql_query.replace("__oc__","{")
+	sparql_query = sparql_query.replace("__ob__","[")
 	sparql_query = sparql_query.replace("__cc__","}")
+	sparql_query = sparql_query.replace("__cb__","]")
 	sparql_query = urllib.quote_plus(sparql_query)
 	url = options.url
 
@@ -62,9 +59,12 @@ def main():
 	results = sparql_endpoint.read()
 	sparql_endpoint.close()
 
-	# Convert to tabular format
-	xmldata = extract_xml( results )
-	tabular = xml_to_tabular( xmldata )
+        # Convert to tabular format
+        if "<sparql" in results:
+                xmldata = extract_xml( results )
+                tabular = xml_to_tabular( xmldata )
+        else:
+                sys.exit("No SPARQL content found in returned data!\nReturned data:\n" + "-"*80 + "\n" + results)
 
 	# Print to file
 	of = open(output_file, "w")
@@ -77,7 +77,7 @@ def main():
 
 def extract_xml( content ):
 	'''Extract the part of the document starting with <?xml ...'''
-	xmlcontent = re.search("<\?xml.*", content, re.DOTALL).group(0)
+	xmlcontent = re.search("<sparql.*", content, re.DOTALL).group(0)
 	return xmlcontent
 
 def xml_to_tabular( xmldata ):
