@@ -1,4 +1,9 @@
 #!/usr/bin/python
+# --------------------------------------------------------
+# A Galaxy plugin for querying external SPARQL Endpoints
+# Samuel Lampa, samuel.lampa@gmail.com
+# Created: 2012-11-16
+# --------------------------------------------------------
 
 from optparse import OptionParser
 import urllib, sys, re
