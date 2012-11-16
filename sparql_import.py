@@ -42,35 +42,22 @@ f.close()
 
 def main():
 	sparql_query = options.sparql_query
-
 	sparql_query = sparql_query.replace("__oc__","{")
 	sparql_query = sparql_query.replace("__cc__","}")
-
 	sparql_query = urllib.quote_plus(sparql_query)
 
 	url = options.url
 
 	sparql_query_url = url + "?query=" + sparql_query
 
-
 	sparql_endpoint = urllib.urlopen(sparql_query_url)
 	results = sparql_endpoint.read()
 	sparql_endpoint.close()
 
 	xmldata = extract_xml( results )
+	tabular = xml_to_tabular( xmldata )
 
-	root = et.fromstring(xmldata)
-	tree = et.ElementTree(root)
-	outline = ""
-
-	results = root.getchildren()[1]
-	for result in results:
-		for binding in result.getchildren():
-			content = binding.getchildren()[0].text
-			outline += content + "\t"
-		outline += "\n"
-
-	print outline
+	print tabular
 
 	#for result in results.findall("result"):
 	#	print result.tag, result.attrib
@@ -86,6 +73,19 @@ def main():
 def extract_xml( content ):
 	xmlcontent = re.search("<\?xml.*", content, re.DOTALL).group(0)
 	return xmlcontent
+
+def xml_to_tabular( xmldata ):
+	root = et.fromstring(xmldata)
+	tree = et.ElementTree(root)
+	tabular = ""
+
+	results = root.getchildren()[1]
+	for result in results:
+		for binding in result.getchildren():
+			content = binding.getchildren()[0].text
+			tabular += content + "\t"
+		tabular += "\n"	
+	return tabular
 
 if __name__ == '__main__':
 	main()
