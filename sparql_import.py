@@ -46,6 +46,8 @@ def main():
 	sparql_query = sparql_query.replace("__ob__","[")
 	sparql_query = sparql_query.replace("__cc__","}")
 	sparql_query = sparql_query.replace("__cb__","]")
+	sparql_query = sparql_query.replace("__cr__"," ")
+	sparql_query = sparql_query.replace("__cn__"," ")
 	sparql_query = urllib.quote_plus(sparql_query)
 	url = options.url
 

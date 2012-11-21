@@ -19,12 +19,26 @@ The SPARQL import executes a SPARQL query against a SPARQL endpoint and returns 
 
 You could for example use this SPARQL Endpoint URL:
 
-    http://sparql.wikipathways.org/
+http://sparql.wikipathways.org/
 
-... and the following SPARQL query, which will select 25 sets of "subject", "predicate" and "object" out of the database, with no filtering at all:
+and the following SPARQL query, which will select 25 sets of "subject", "predicate" and "object" out of the database, with no filtering at all::
 
-    SELECT ?s ?p ?o 
+    SELECT ?s ?p ?o
     WHERE { ?s ?p ?o } 
-    LIMIT 25 
+    LIMIT 10
+
+This will generate a 3-column tabular output like this::
+
+    http://identifiers.org/pubmed/12860264  http://www.w3.org/1999/02/22-rdf-syntax-ns#type http://vocabularies.wikipathways.org/wp#PublicationReference
+    http://identifiers.org/pubmed/15782111  http://www.w3.org/1999/02/22-rdf-syntax-ns#type http://vocabularies.wikipathways.org/wp#PublicationReference
+    http://identifiers.org/pubmed/11017945  http://www.w3.org/1999/02/22-rdf-syntax-ns#type http://vocabularies.wikipathways.org/wp#PublicationReference
+    http://identifiers.org/pubmed/10997684  http://www.w3.org/1999/02/22-rdf-syntax-ns#type http://vocabularies.wikipathways.org/wp#PublicationReference
+    http://identifiers.org/pubmed/19635799  http://www.w3.org/1999/02/22-rdf-syntax-ns#type http://vocabularies.wikipathways.org/wp#PublicationReference
+    http://identifiers.org/pubmed/16480962  http://www.w3.org/1999/02/22-rdf-syntax-ns#type http://vocabularies.wikipathways.org/wp#PublicationReference
+    http://identifiers.org/pubmed/15976321  http://www.w3.org/1999/02/22-rdf-syntax-ns#type http://vocabularies.wikipathways.org/wp#PublicationReference
+    http://identifiers.org/pubmed/17218259  http://www.w3.org/1999/02/22-rdf-syntax-ns#type http://vocabularies.wikipathways.org/wp#PublicationReference
+    http://identifiers.org/pubmed/17215298  http://www.w3.org/1999/02/22-rdf-syntax-ns#type http://vocabularies.wikipathways.org/wp#PublicationReference
+    http://identifiers.org/pubmed/11177571  http://www.w3.org/1999/02/22-rdf-syntax-ns#type http://vocabularies.wikipathways.org/wp#PublicationReference
+
 </help>
 </tool>
