@@ -9,6 +9,22 @@
 		<data name="outfile" format="tabular"/>
 	</outputs>
 	<help>
+**What it does**
 
-	</help>
+The SPARQL import executes a SPARQL query against a SPARQL endpoint and returns the results in tabular format, with one column per variable in the SPARQL query.
+
+-------
+
+**Example**
+
+You could for example use this SPARQL Endpoint URL:
+
+    http://sparql.wikipathways.org/
+
+... and the following SPARQL query, which will select 25 sets of "subject", "predicate" and "object" out of the database, with no filtering at all:
+
+    SELECT ?s ?p ?o 
+    WHERE { ?s ?p ?o } 
+    LIMIT 25 
+</help>
 </tool>
