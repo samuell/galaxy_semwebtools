@@ -10,44 +10,16 @@ from optparse import OptionParser
 import urllib, sys, re
 
 # -----------------------
-# Option parsing
-# -----------------------
-
-parser = OptionParser()
-parser.add_option("-u", "--url",
-	help = "The URL to the SPARQL endpoint")
-parser.add_option("-q", "--sparql_query",
-	help = "A SPARQL query to send to a SPARQL endpoint")
-parser.add_option("-o", "--output_file",
-	help = "An output file for storing the results")
-(options, args) = parser.parse_args()
-
-if not options.url:
-	sys.exit("You have to specify an URL! Use the -h flag to view command line options!")
-if not options.sparql_query:
-	sys.exit("You have to specify a SPARQL query! Use the -h flag to view command line options!")
-if not options.output_file:
-	sys.exit("You have to specify an output file! Use the -h flag to view command line options!")
-
-if len(options.sparql_query) < 9: 
-	sys.exit("Your SPARQL query is too short (printed below)!\n" + options.sparql_query)
-
-if not re.match("^http", options.url):
-	sys.exit("The URL has to start with 'http://'! Please try again!")
-
-# -----------------------
 # The main code
 # -----------------------
 
 def main():
+	parse_options()
+
 	# Extract command line options
 	sparql_query = options.sparql_query
-	sparql_query = sparql_query.replace("__oc__","{")
-	sparql_query = sparql_query.replace("__ob__","[")
-	sparql_query = sparql_query.replace("__cc__","}")
-	sparql_query = sparql_query.replace("__cb__","]")
-	sparql_query = sparql_query.replace("__cr__"," ")
-	sparql_query = sparql_query.replace("__cn__"," ")
+	sparql_query = restore_escaped_chars( sparql_query ) 
+
 	sparql_query = urllib.quote_plus(sparql_query)
 	url = options.url
 
@@ -94,6 +66,39 @@ def xml_to_tabular( xmldata ):
 		line = "\t".join(line_bits)
 		tabular += line + "\n"	
 	return tabular
+
+def restore_escaped_chars( sparql_query ):
+	sparql_query = sparql_query.replace("__oc__","{")
+	sparql_query = sparql_query.replace("__ob__","[")
+	sparql_query = sparql_query.replace("__cc__","}")
+	sparql_query = sparql_query.replace("__cb__","]")
+	sparql_query = sparql_query.replace("__cr__"," ")
+	sparql_query = sparql_query.replace("__cn__"," ")
+	sparql_query = sparql_query.replace("__at__","@")
+	return sparql_query
+
+def parse_options():
+	parser = OptionParser()
+	parser.add_option("-u", "--url",
+		help = "The URL to the SPARQL endpoint")
+	parser.add_option("-q", "--sparql_query",
+		help = "A SPARQL query to send to a SPARQL endpoint")
+	parser.add_option("-o", "--output_file",
+		help = "An output file for storing the results")
+	(options, args) = parser.parse_args()
+
+	if not options.url:
+		sys.exit("You have to specify an URL! Use the -h flag to view command line options!")
+	if not options.sparql_query:
+		sys.exit("You have to specify a SPARQL query! Use the -h flag to view command line options!")
+	if not options.output_file:
+		sys.exit("You have to specify an output file! Use the -h flag to view command line options!")
+
+	if len(options.sparql_query) < 9: 
+		sys.exit("Your SPARQL query is too short (printed below)!\n" + options.sparql_query)
+
+	if not re.match("^http", options.url):
+		sys.exit("The URL has to start with 'http://'! Please try again!")
 
 if __name__ == '__main__':
 	main()

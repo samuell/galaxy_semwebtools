@@ -1,4 +1,4 @@
-<tool id="sparql_import" name="SPARQL Import" version="0.0.1">
+<tool id="sparql_import" name="SPARQL Import" version="1.0.0">
 	<description>Import data from a SPARQL Endpoint</description>
 	<command interpreter="python">sparql_import.py -u $url -q "$sparqlquery" -o $outfile</command>
 	<inputs>
