@@ -61,7 +61,7 @@ def xml_to_tabular( xmldata ):
 
 	results = root.getchildren()[1]
 	for result in results:
-		line_bits = [binding.getchildren()[0].text for binding in result.getchildren()]
+		line_bits = ['<' + binding.getchildren()[0].text + '>' for binding in result.getchildren()]
 		line = "\t".join(line_bits)
 		tabular += line + "\n"	
 	return tabular
