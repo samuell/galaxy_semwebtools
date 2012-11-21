@@ -14,15 +14,14 @@ import urllib, sys, re
 # -----------------------
 
 def main():
+	# Parse command line options
 	(options, args) = parse_options()
 
 	# Extract command line options
 	sparql_query = options.sparql_query
 	sparql_query = restore_escaped_chars( sparql_query ) 
-
 	sparql_query = urllib.quote_plus(sparql_query)
 	url = options.url
-
 	output_file = options.output_file
 
 	# Create SPARQL query URL
@@ -38,7 +37,7 @@ def main():
                 xmldata = extract_xml( results )
                 tabular = xml_to_tabular( xmldata )
         else:
-                sys.exit("No SPARQL content found in returned data!\nReturned data:\n" + "-"*80 + "\n" + results)
+                sys.exit("No SPARQL content found in returned data!\nReturned data:\n" + "-"*10 + "\n" + results)
 
 	# Print to file
 	of = open(output_file, "w")
