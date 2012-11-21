@@ -14,7 +14,7 @@ import urllib, sys, re
 # -----------------------
 
 def main():
-	parse_options()
+	(options, args) = parse_options()
 
 	# Extract command line options
 	sparql_query = options.sparql_query
@@ -99,6 +99,8 @@ def parse_options():
 
 	if not re.match("^http", options.url):
 		sys.exit("The URL has to start with 'http://'! Please try again!")
+
+	return options, args
 
 if __name__ == '__main__':
 	main()
